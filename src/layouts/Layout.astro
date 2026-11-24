@@ -1,23 +1,97 @@
+---
+import '../styles/global.css';
+const { title = 'Burakhan | Laid-Back & Open to Where Things Go' } = Astro.props;
+---
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+  <script is:inline src="https://cdn.tailwindcss.com"></script>
+  <script is:inline>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#09080A',
+            'obsidian-card': 'rgba(18, 15, 20, 0.85)',
+            burgundy: '#590D22',
+            'burgundy-dark': '#3B0713',
+            gold: '#D4AF37',
+            'gold-light': '#F5E6B8',
+            'gold-dark': '#A38025',
+            ivory: '#F8F5F0',
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            cormorant: ['Cormorant Garamond', 'serif'],
+            montserrat: ['Montserrat', 'sans-serif'],
+          },
+          boxShadow: {
+            'gold-glow': '0 0 25px rgba(212, 175, 55, 0.25)',
+            'gold-glow-lg': '0 0 45px rgba(212, 175, 55, 0.4)',
+            'burgundy-glow': '0 0 30px rgba(89, 13, 34, 0.5)',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body data-theme="modern" class="bg-obsidian text-ivory font-montserrat antialiased bg-pattern min-h-screen selection:bg-burgundy selection:text-gold">
+  <slot />
+
+  <script>
+    // Mobile menu
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
+
+    // Hero image fallback
+    const mainImg = document.getElementById('burakhan-main-img');
+    const heroFallback = document.getElementById('hero-fallback');
+    mainImg?.addEventListener('error', () => {
+      mainImg.classList.add('hidden');
+      heroFallback?.classList.remove('hidden');
+    });
+
+    // Theme toggle
+    const toggles = document.querySelectorAll('[data-style-toggle]');
+    const syncStyleUI = (theme: string) => {
+      const dark = theme === 'after-dark';
+      document.body.setAttribute('data-theme', theme);
+      toggles.forEach((btn) => {
+        btn.setAttribute('aria-pressed', String(dark));
+        btn.setAttribute('aria-label', dark ? 'Switch to Modern style' : 'Switch to After Dark style');
+        const icon = btn.querySelector('[data-style-icon]');
+        const label = btn.querySelector('[data-style-label]');
+        if (icon) icon.textContent = dark ? '☀' : '☾';
+        if (label) label.textContent = dark ? 'Modern' : 'After Dark';
+      });
+    };
+    syncStyleUI(document.body.getAttribute('data-theme') || 'modern');
+    toggles.forEach((btn) =>
+      btn.addEventListener('click', () =>
+        syncStyleUI(document.body.getAttribute('data-theme') === 'after-dark' ? 'modern' : 'after-dark')
+      )
+    );
+
+    // Form feedback
+    const form = document.getElementById('connect-form') as HTMLFormElement | null;
+    const statusEl = document.getElementById('form-status');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = (document.getElementById('name') as HTMLInputElement)?.value.trim() || 'there';
+      if (statusEl) {
+        statusEl.textContent = `Got it, ${name}—no pressure, I'll check in soon and see where things go.`;
+        statusEl.classList.remove('hidden');
+      }
+      form.reset();
+    });
+  </script>
+</body>
+</html>
