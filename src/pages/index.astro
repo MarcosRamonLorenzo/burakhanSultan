@@ -494,11 +494,11 @@ import '../styles/global.css';
         <div class="grid sm:grid-cols-2 gap-6">
           <div>
             <label for="name" class="block font-cinzel text-xs uppercase tracking-widest text-gold mb-2">Your name</label>
-            <input id="name" type="text" required placeholder="What should I call you?" class="w-full px-4 py-3 rounded-xl bg-obsidian/70 border border-gold/30 text-ivory focus:outline-none focus:border-gold" />
+            <input id="name" name="name" type="text" required maxlength="100" placeholder="What should I call you?" class="w-full px-4 py-3 rounded-xl bg-obsidian/70 border border-gold/30 text-ivory focus:outline-none focus:border-gold" />
           </div>
           <div>
             <label for="contact" class="block font-cinzel text-xs uppercase tracking-widest text-gold mb-2">Where to reach you</label>
-            <input id="contact" type="text" required placeholder="Instagram, handle, or email" class="w-full px-4 py-3 rounded-xl bg-obsidian/70 border border-gold/30 text-ivory focus:outline-none focus:border-gold" />
+            <input id="contact" name="contact" type="text" required maxlength="200" placeholder="Instagram, handle, or email" class="w-full px-4 py-3 rounded-xl bg-obsidian/70 border border-gold/30 text-ivory focus:outline-none focus:border-gold" />
           </div>
         </div>
 
@@ -531,7 +531,7 @@ import '../styles/global.css';
 
         <div>
           <label for="message" class="block font-cinzel text-xs uppercase tracking-widest text-gold mb-2">Quick note</label>
-          <textarea id="message" rows="4" placeholder="What’s your vibe, or what sounds good this week?" class="w-full px-4 py-3 rounded-xl bg-obsidian/70 border border-gold/30 text-ivory focus:outline-none focus:border-gold"></textarea>
+          <textarea id="message" name="message" rows="4" maxlength="2000" placeholder="What’s your vibe, or what sounds good this week?" class="w-full px-4 py-3 rounded-xl bg-obsidian/70 border border-gold/30 text-ivory focus:outline-none focus:border-gold"></textarea>
         </div>
 
         <button id="submit-btn" type="submit" class="w-full py-4 bg-gradient-to-r from-burgundy via-burgundy-dark to-burgundy border border-gold text-gold font-cinzel font-bold tracking-wider uppercase rounded-full shadow-gold-glow hover:scale-[1.01] transition-all">Send note</button>
@@ -550,6 +550,8 @@ import '../styles/global.css';
   </footer>
 
   <script>
+    import { createSupabaseClient } from '../lib/supabase';
+
     // Menú móvil
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -587,14 +589,54 @@ import '../styles/global.css';
     // Formulario
     const form = document.getElementById('connect-form') as HTMLFormElement | null;
     const statusEl = document.getElementById('form-status');
-    form?.addEventListener('submit', (e) => {
+    const submitButton = document.getElementById('submit-btn') as HTMLButtonElement | null;
+    form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = (document.getElementById('name') as HTMLInputElement)?.value.trim() || 'there';
-      if (statusEl) {
-        statusEl.textContent = `Got it, ${name}—no pressure, I'll check in soon and see where things go.`;
-        statusEl.classList.remove('hidden');
+
+      const formData = new FormData(form);
+      const name = String(formData.get('name') ?? '').trim();
+      const contact = String(formData.get('contact') ?? '').trim();
+      const vibe = String(formData.get('vibe') ?? '');
+      const message = String(formData.get('message') ?? '').trim();
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
       }
-      form.reset();
+
+      try {
+        const supabase = createSupabaseClient();
+        const { error } = await supabase.from('contact_messages').insert({
+          name,
+          contact,
+          vibe,
+          message: message || null,
+        });
+
+        if (error) throw error;
+
+        if (statusEl) {
+          statusEl.textContent = `Thanks, ${name}—your note has been sent.`;
+          statusEl.classList.remove('hidden', 'text-red-400');
+          statusEl.classList.add('text-gold');
+        }
+        form.reset();
+      } catch (error) {
+        console.error('Could not send the contact form to Supabase:', error);
+        if (statusEl) {
+          statusEl.textContent =
+            error instanceof Error && error.message.startsWith('Missing Supabase environment variables')
+              ? 'Supabase is not configured. Add the required variables from .env.example and try again.'
+              : 'Your note could not be sent right now. Please try again later.';
+          statusEl.classList.remove('hidden', 'text-gold');
+          statusEl.classList.add('text-red-400');
+        }
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Send note';
+        }
+      }
     });
   </script>
 </body>
