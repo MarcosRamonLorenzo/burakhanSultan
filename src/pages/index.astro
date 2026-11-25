@@ -86,12 +86,6 @@ import '../styles/global.css';
       background: linear-gradient(90deg, transparent, #D4AF37, transparent);
     }
 
-    .date-radio:checked + label {
-      border-color: #D4AF37;
-      background: linear-gradient(135deg, rgba(89, 13, 34, 0.6) 0%, rgba(9, 8, 10, 0.9) 100%);
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-    }
-
     /* ===== Tema modern ===== */
     body[data-theme="modern"] {
       background-color: #f8fafc;
@@ -120,6 +114,12 @@ import '../styles/global.css';
     body[data-theme="modern"] .gallery-caption [class*="text-gold"] { color: #c4b5fd !important; }
     body[data-theme="modern"] .gallery-caption [class*="text-ivory"] { color: #f8fafc !important; }
     body[data-theme="modern"] [class*="border-gold"] { border-color: #c7d2fe !important; }
+    body[data-theme="modern"] .date-radio:checked + label {
+      border-color: #4338ca !important;
+    }
+    body[data-theme="after-dark"] .date-radio:checked + label {
+      border-color: #e7a0b5 !important;
+    }
     body[data-theme="modern"] input,
     body[data-theme="modern"] textarea {
       color: #1f2937 !important;
