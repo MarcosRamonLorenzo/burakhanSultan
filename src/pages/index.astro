@@ -1,5 +1,10 @@
 ---
 // src/pages/index.astro
+import { Image } from 'astro:assets';
+import heroPhoto from '../assets/img/b1.jpeg';
+import nightPhoto from '../assets/img/b2.jpeg';
+import riversidePhoto from '../assets/img/b3.jpeg';
+import profileVideo from '../assets/img/v1.mp4?url';
 import '../styles/global.css';
 ---
 <!doctype html>
@@ -89,19 +94,19 @@ import '../styles/global.css';
 
     /* ===== Tema modern ===== */
     body[data-theme="modern"] {
-      background-color: #f5f6fa;
-      background-image: radial-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+      background-color: #f8fafc;
+      background-image: radial-gradient(rgba(79, 70, 229, 0.07) 1px, transparent 1px);
       color: #1f2937;
       font-family: Inter, ui-sans-serif, system-ui, sans-serif;
     }
     body[data-theme="modern"] nav {
       background-color: rgba(255, 255, 255, 0.92);
-      border-color: #e5e7eb;
+      border-color: #cbd5e1;
       box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
     }
     body[data-theme="modern"] .glass-card {
       background: rgba(255, 255, 255, 0.92);
-      border-color: #e5e7eb;
+      border-color: #cbd5e1;
       box-shadow: 0 14px 40px rgba(15, 23, 42, 0.07);
       backdrop-filter: blur(16px);
     }
@@ -109,24 +114,40 @@ import '../styles/global.css';
       border-color: #c7d2fe;
       box-shadow: 0 18px 45px rgba(79, 70, 229, 0.12);
     }
-    body[data-theme="modern"] [class*="text-gold"] { color: #5145cd !important; }
-    body[data-theme="modern"] [class*="text-ivory"] { color: #374151 !important; }
+    body[data-theme="modern"] [class*="text-gold"] { color: #4338ca !important; }
+    body[data-theme="modern"] [class*="text-ivory"] { color: #1f2937 !important; }
     body[data-theme="modern"] .profile-overlay [class*="text-ivory"] { color: #fff !important; }
-    body[data-theme="modern"] [class*="border-gold"] { border-color: #dfe2f0 !important; }
-    body[data-theme="modern"] input::placeholder { color: #9ca3af; }
+    body[data-theme="modern"] .gallery-caption [class*="text-gold"] { color: #c4b5fd !important; }
+    body[data-theme="modern"] .gallery-caption [class*="text-ivory"] { color: #f8fafc !important; }
+    body[data-theme="modern"] [class*="border-gold"] { border-color: #c7d2fe !important; }
+    body[data-theme="modern"] input,
+    body[data-theme="modern"] textarea {
+      color: #1f2937 !important;
+      border-color: #94a3b8 !important;
+    }
+    body[data-theme="modern"] input::placeholder,
+    body[data-theme="modern"] textarea::placeholder { color: #64748b; opacity: 1; }
+    body[data-theme="modern"] input:focus-visible,
+    body[data-theme="modern"] textarea:focus-visible {
+      border-color: #4338ca !important;
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.16);
+    }
     body[data-theme="modern"] [class*="bg-burgundy"],
-    body[data-theme="modern"] [class*="bg-obsidian"] { background-color: #f1f2f8 !important; }
+    body[data-theme="modern"] [class*="bg-obsidian"] { background-color: #eef2f7 !important; }
     body[data-theme="modern"] .font-cinzel,
     body[data-theme="modern"] .font-cormorant {
       font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
       letter-spacing: normal;
     }
     body[data-theme="modern"] .gold-text-shimmer {
-      background-image: linear-gradient(120deg, #24243a 0%, #5145cd 55%, #8b5cf6 100%);
+      background-image: linear-gradient(120deg, #1e1b4b 0%, #4338ca 55%, #6d28d9 100%);
     }
     body[data-theme="modern"] .bg-pattern {
-      background-color: #f5f6fa;
-      background-image: radial-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+      background-color: #f8fafc;
+      background-image: radial-gradient(rgba(79, 70, 229, 0.07) 1px, transparent 1px);
+    }
+    body[data-theme="modern"] .bg-gradient-to-b {
+      background-image: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #f8fafc 100%) !important;
     }
     body[data-theme="modern"] .section-divider::before,
     body[data-theme="modern"] .section-divider::after {
@@ -134,9 +155,9 @@ import '../styles/global.css';
     }
     body[data-theme="modern"] a[href="#apply"],
     body[data-theme="modern"] #submit-btn {
-      background-image: linear-gradient(135deg, #5145cd, #3730a3);
-      border-color: #5145cd;
-      color: #d4c9f7 !important;
+      background-image: linear-gradient(135deg, #4338ca, #312e81);
+      border-color: #312e81;
+      color: #fff !important;
       box-shadow: 0 10px 24px rgba(79, 70, 229, 0.22);
     }
 
@@ -225,6 +246,7 @@ import '../styles/global.css';
       <div class="hidden md:flex items-center space-x-8 text-sm tracking-widest uppercase">
         <a href="#legend" class="text-ivory/80 hover:text-gold transition-colors">About</a>
         <a href="#gallery" class="text-ivory/80 hover:text-gold transition-colors">Photos</a>
+        <a href="#video" class="text-ivory/80 hover:text-gold transition-colors">Video</a>
         <a href="#whispers" class="text-ivory/80 hover:text-gold transition-colors">The vibe</a>
         <a href="#apply" class="px-5 py-2.5 bg-gradient-to-r from-burgundy via-burgundy-dark to-burgundy border border-gold/50 hover:border-gold rounded-full text-gold font-cinzel font-semibold tracking-wider transition-all duration-300 shadow-gold-glow hover:scale-105">Drop a note</a>
         <button type="button" data-style-toggle class="style-toggle rounded-full px-4 py-2.5 font-cinzel text-xs font-semibold tracking-wider" aria-pressed="false" aria-label="Switch to After Dark style">
@@ -249,6 +271,7 @@ import '../styles/global.css';
     <div id="mobile-menu" class="hidden md:hidden bg-obsidian/95 border-b border-gold/30 px-6 py-6 space-y-4 text-center">
       <a href="#legend" class="block text-ivory uppercase tracking-widest py-2 hover:text-gold">About</a>
       <a href="#gallery" class="block text-ivory uppercase tracking-widest py-2 hover:text-gold">Photos</a>
+      <a href="#video" class="block text-ivory uppercase tracking-widest py-2 hover:text-gold">Video</a>
       <a href="#whispers" class="block text-ivory uppercase tracking-widest py-2 hover:text-gold">The vibe</a>
       <a href="#apply" class="block w-full py-3 bg-burgundy border border-gold text-gold font-cinzel tracking-widest uppercase rounded-full">Drop a note</a>
     </div>
@@ -307,7 +330,7 @@ import '../styles/global.css';
             <div id="profile-image-frame" class="relative rounded-3xl bg-white border border-gold/30 overflow-hidden shadow-2xl p-2">
               <div class="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-gradient-to-b from-burgundy-dark to-obsidian flex flex-col items-center justify-center text-center p-6">
 
-                <img id="burakhan-main-img" src="/img/Screenshot_20261123-232636_Tinder.png" alt="The Burakhan" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" />
+                <Image id="burakhan-main-img" src={heroPhoto} alt="Burakhan taking a mirror selfie" loading="eager" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" />
 
                 <div id="hero-fallback" class="hidden relative z-10 flex flex-col items-center">
                   <div class="w-24 h-24 rounded-full border-2 border-gold flex items-center justify-center bg-burgundy/60 mb-4">
@@ -420,34 +443,53 @@ import '../styles/global.css';
 
       <div class="mt-12 grid md:grid-cols-3 gap-8">
         <div class="group relative rounded-2xl overflow-hidden glass-card border border-gold/30 aspect-[4/5] shadow-xl">
-          <img src="/img/Screenshot_20261123-232645_Tinder.png" alt="Burakhan by the Danube in Bratislava" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90" />
+          <Image src={riversidePhoto} alt="Burakhan by the Danube in Bratislava" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90" />
           <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-          <div class="absolute bottom-0 inset-x-0 p-6 space-y-1">
+          <div class="gallery-caption absolute bottom-0 inset-x-0 p-6 space-y-1">
             <span class="text-xs font-cinzel text-gold uppercase tracking-widest">Slow afternoon</span>
-            <h3 class="font-cinzel text-xl text-ivory font-bold">Wandering around</h3>
-            <p class="font-cormorant text-sm text-ivory/70 italic">Sunny walk, good weather, no rush.</p>
+            <h3 class="font-cinzel text-xl text-ivory font-bold">By the river</h3>
+            <p class="font-cormorant text-sm text-ivory/70 italic">A calm afternoon in Bratislava.</p>
           </div>
         </div>
 
         <div class="group relative rounded-2xl overflow-hidden glass-card border border-gold/30 aspect-[4/5] shadow-xl">
-          <img src="/img/Screenshot_20261123-232648_Tinder.png" alt="Burakhan by the river in Bratislava" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90" />
+          <Image src={nightPhoto} alt="Burakhan by the Danube with Budapest Parliament at night" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90" />
           <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-          <div class="absolute bottom-0 inset-x-0 p-6 space-y-1">
-            <span class="text-xs font-cinzel text-gold uppercase tracking-widest">By the water</span>
-            <h3 class="font-cinzel text-xl text-ivory font-bold">Taking it easy</h3>
-            <p class="font-cormorant text-sm text-ivory/70 italic">Fresh air and a quiet moment by the river.</p>
+          <div class="gallery-caption absolute bottom-0 inset-x-0 p-6 space-y-1">
+            <span class="text-xs font-cinzel text-gold uppercase tracking-widest">City lights</span>
+            <h3 class="font-cinzel text-xl text-ivory font-bold">Budapest at night</h3>
+            <p class="font-cormorant text-sm text-ivory/70 italic">An evening by the Danube.</p>
           </div>
         </div>
 
         <div class="group relative rounded-2xl overflow-hidden glass-card border border-gold/30 aspect-[4/5] shadow-xl">
-          <img src="/img/Screenshot_20261123-232642_Tinder.png" alt="Burakhan in Budapest at night" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90" />
+          <Image src={heroPhoto} alt="Burakhan taking a mirror selfie" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90" />
           <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-          <div class="absolute bottom-0 inset-x-0 p-6 space-y-1">
-            <span class="text-xs font-cinzel text-gold uppercase tracking-widest">Late evening</span>
-            <h3 class="font-cinzel text-xl text-ivory font-bold">Night lights</h3>
-            <p class="font-cormorant text-sm text-ivory/70 italic">Out for the night and seeing where it leads.</p>
+          <div class="gallery-caption absolute bottom-0 inset-x-0 p-6 space-y-1">
+            <span class="text-xs font-cinzel text-gold uppercase tracking-widest">A quiet moment</span>
+            <h3 class="font-cinzel text-xl text-ivory font-bold">Before heading out</h3>
+            <p class="font-cormorant text-sm text-ivory/70 italic">A quick mirror selfie.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section id="video" class="py-24 relative border-t border-gold/20 bg-gradient-to-b from-obsidian via-burgundy-dark/20 to-obsidian">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <span class="font-cormorant text-lg text-gold tracking-widest uppercase font-semibold">A MOMENT IN MOTION</span>
+        <h2 class="font-cinzel text-3xl sm:text-5xl font-bold text-ivory">LIFE BEYOND THE PHOTOS</h2>
+        <div class="section-divider my-2"><span class="text-gold">✦</span></div>
+        <p class="font-cormorant text-lg text-ivory/80 italic">A little more life lately, in motion.</p>
+      </div>
+
+      <div class="mt-12 glass-card rounded-3xl p-2 sm:p-4 shadow-2xl">
+        <video class="block w-full aspect-video rounded-2xl bg-black object-contain" controls playsinline preload="metadata" poster={heroPhoto.src} aria-label="Burakhan profile video">
+          <source src={profileVideo} type="video/mp4" />
+          Your browser does not support HTML video.
+        </video>
       </div>
     </div>
   </section>
